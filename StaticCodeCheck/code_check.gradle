@@ -28,9 +28,9 @@ task findbugs(type: FindBugs) {
     effort = "max"
     reportLevel = "high"
     excludeFilter = new File("${project.rootDir}/StaticCodeCheck/findbugs/findbugs-filter.xml")
-    classes = files("${project.rootDir}/app/build/intermediates/classes")
+    classes = files("$project.buildDir/intermediates/classes")
 
-    source 'src'
+    source fileTree('src/main/java/')
     include '**/*.java'
     exclude '**/gen/**'
 
