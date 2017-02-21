@@ -3,7 +3,7 @@ plugins {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.getkeepsafe.dexcount'
 apply from: '../analysis/analysis.gradle'
 
 def APP_VERSION = "1.0.0"
