@@ -91,7 +91,7 @@ sonarqube {
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-25/android.jar," +
                 "build/intermediates/exploded-aar/**/classes.jar"
 
-        property "sonar.host.url", "http://127.0.0.1:9000/sonar"
+        property "sonar.host.url", "http://192.168.33.93:9000/sonar"
         property "sonar.projectKey", "CIPractice" // some shortcut name
         property "sonar.projectName", "CIPractice"
         property "sonar.projectVersion", AppVersion
@@ -118,15 +118,4 @@ sonarqube {
         property "sonar.android.lint.report", "build/outputs/lint-results-${flavor}Debug.xml"
         // path to lint reports
     }
-}
-
-import org.gradle.internal.os.OperatingSystem;
-
-task analysis(type: Exec) {
-    workingDir "./"
-    def command = "../gradlew"
-
-//    commandLine command, "clean", "assemble${Flavor}Debug", "lint${Flavor}Debug", "jacocoTest${Flavor}DebugUnitTestReport", "sonarqube"
-
-    commandLine command, "clean", "assemble${Flavor}Debug", "lint", "checkstyle", "findbugs", "pmd", "sonarqube"
 }
