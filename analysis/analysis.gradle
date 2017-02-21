@@ -1,3 +1,81 @@
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+// Add checkstyle, findbugs, pmd and lint to the check task.
+check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/analysis/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/analysis/checkstyle/suppressions.xml").absolutePath
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml {
+            destination "$project.buildDir/outputs/checkstyle/checkstyle.xml"
+        }
+        html {
+            destination "$project.buildDir/outputs/checkstyle/checkstyle.html"
+        }
+    }
+}
+
+task findbugs(type: FindBugs) {
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "high"
+    excludeFilter = new File("${project.rootDir}/analysis/findbugs/findbugs-filter.xml")
+    classes = files("$project.buildDir/intermediates/classes")
+
+    source fileTree('src/main/java/')
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = true
+        xml {
+            destination "$project.buildDir/outputs/findbugs/findbugs.xml"
+        }
+    }
+
+    classpath = files()
+}
+
+task pmd(type: Pmd) {
+    ignoreFailures = true
+    ruleSetFiles = files("${project.rootDir}/analysis/pmd/pmd-ruleset.xml")
+    ruleSets = []
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        xml {
+            destination "$project.buildDir/outputs/pmd/pmd.xml"
+        }
+        html {
+            destination "$project.buildDir/outputs/pmd/pmd.html"
+        }
+    }
+}
+
+android {
+    lintOptions {
+        abortOnError true
+        xmlReport true
+        htmlReport true
+        lintConfig file("${project.rootDir}/analysis/lint/lint.xml")
+        htmlOutput file("$project.buildDir/outputs/lint/lint-result.html")
+        xmlOutput file("$project.buildDir/outputs/lint/lint-result.xml")
+    }
+}
+
 // recommend to specify the flavor once and dynamically adapt paths to it
 def flavor = "develop" // flavor we want to have tested. Should be static
 def Flavor = "Develop" // flavor again, but starting with upper case
@@ -44,12 +122,11 @@ sonarqube {
 
 import org.gradle.internal.os.OperatingSystem;
 
-task sonarComplete(type: Exec) {
+task analysis(type: Exec) {
     workingDir "./"
     def command = "../gradlew"
-    if (OperatingSystem.current().isWindows()) {
-        command = command + ".bat"
-    }
+
 //    commandLine command, "clean", "assemble${Flavor}Debug", "lint${Flavor}Debug", "jacocoTest${Flavor}DebugUnitTestReport", "sonarqube"
-    commandLine command, "clean", "assemble${Flavor}Debug", "lint${Flavor}Debug", "sonarqube"
+
+    commandLine command, "clean", "assemble${Flavor}Debug", "lint", "checkstyle", "findbugs", "pmd", "sonarqube"
 }
