@@ -5,8 +5,8 @@ apply plugin: 'pmd'
 check.dependsOn 'checkstyle', 'findbugs', 'pmd', 'lint'
 
 task checkstyle(type: Checkstyle) {
-    configFile file("${project.rootDir}/StaticCodeCheck/checkstyle/checkstyle.xml")
-    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/StaticCodeCheck/checkstyle/suppressions.xml").absolutePath
+    configFile file("${project.rootDir}/analysis/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/analysis/checkstyle/suppressions.xml").absolutePath
     source 'src'
     include '**/*.java'
     exclude '**/gen/**'
@@ -27,7 +27,7 @@ task findbugs(type: FindBugs) {
     ignoreFailures = true
     effort = "max"
     reportLevel = "high"
-    excludeFilter = new File("${project.rootDir}/StaticCodeCheck/findbugs/findbugs-filter.xml")
+    excludeFilter = new File("${project.rootDir}/analysis/findbugs/findbugs-filter.xml")
     classes = files("$project.buildDir/intermediates/classes")
 
     source fileTree('src/main/java/')
@@ -46,7 +46,7 @@ task findbugs(type: FindBugs) {
 
 task pmd(type: Pmd) {
     ignoreFailures = true
-    ruleSetFiles = files("${project.rootDir}/StaticCodeCheck/pmd/pmd-ruleset.xml")
+    ruleSetFiles = files("${project.rootDir}/analysis/pmd/pmd-ruleset.xml")
     ruleSets = []
 
     source 'src'
@@ -70,7 +70,7 @@ android {
         abortOnError true
         xmlReport true
         htmlReport true
-        lintConfig file("${project.rootDir}/StaticCodeCheck/lint/lint.xml")
+        lintConfig file("${project.rootDir}/analysis/lint/lint.xml")
         htmlOutput file("$project.buildDir/outputs/lint/lint-result.html")
         xmlOutput file("$project.buildDir/outputs/lint/lint-result.xml")
     }
