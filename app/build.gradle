@@ -1,3 +1,7 @@
+plugins {
+    id "org.sonarqube" version "2.2.1"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply from: '../analysis/analysis.gradle'
@@ -20,11 +24,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    productFlavors {
-        develop {
-
         }
     }
     productFlavors {

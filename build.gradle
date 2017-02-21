@@ -12,10 +12,6 @@ buildscript {
     }
 }
 
-plugins {
-    id "org.sonarqube" version "2.2.1"
-}
-
 allprojects {
     repositories {
         jcenter()
