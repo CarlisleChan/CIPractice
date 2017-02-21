@@ -91,7 +91,7 @@ sonarqube {
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-25/android.jar," +
                 "build/intermediates/exploded-aar/**/classes.jar"
 
-        property "sonar.host.url", "http://192.168.33.93:9000"
+        property "sonar.host.url", "http://127.0.0.1:9000"
         property "sonar.projectKey", "CIPractice" // some shortcut name
         property "sonar.projectName", "CIPractice"
         property "sonar.projectVersion", AppVersion
